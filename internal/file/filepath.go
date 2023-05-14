@@ -42,3 +42,16 @@ func GetPath(filePath string) (string, error) {
 func JoinPath(dir, filename string) string {
 	return filepath.Join(dir, filename)
 }
+
+func CreateDirAndFile(filePath string, content []byte) error {
+	dir := filepath.Dir(filePath)
+	err := os.MkdirAll(dir, 0750)
+	if err != nil && !os.IsExist(err) {
+		return err
+	}
+
+	if err := os.WriteFile(filePath, content, 0644); err != nil {
+		return err
+	}
+	return nil
+}
