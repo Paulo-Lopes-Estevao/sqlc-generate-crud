@@ -1,19 +1,22 @@
 package file
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 )
 
-func checkFileExists(filePath string) (bool, error) {
+func CheckFileIfExists(filePath string) (bool, error) {
 	_, err := os.Stat(filePath)
-	if err == nil {
-		return true, nil
-	} else if os.IsNotExist(err) {
+	if os.IsNotExist(err) {
 		return false, nil
-	} else {
-		return false, err
 	}
+
+	if err != nil {
+		return false, fmt.Errorf("failed to check file: %v", err)
+	}
+
+	return true, nil
 }
 
 func ReadFile(filePath string) ([]byte, error) {
