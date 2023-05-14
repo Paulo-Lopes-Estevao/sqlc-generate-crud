@@ -15,3 +15,15 @@ func checkFileExists(filePath string) (bool, error) {
 		return false, err
 	}
 }
+
+func ReadFile(filePath string) ([]byte, error) {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	return content, nil
+}
+
+func JoinPath(dir, filename string) string {
+	return filepath.Join(dir, filename)
+}
