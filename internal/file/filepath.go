@@ -27,6 +27,18 @@ func ReadFile(filePath string) ([]byte, error) {
 	return content, nil
 }
 
+func GetPath(filePath string) (string, error) {
+	abspath, err := filepath.Abs(filePath)
+	if err != nil {
+		return "", fmt.Errorf("error parsing config: absolute file path lookup failed: %s\n", err)
+	}
+	base := filepath.Base(abspath)
+
+	dir := filepath.Dir(base)
+
+	return dir, nil
+}
+
 func JoinPath(dir, filename string) string {
 	return filepath.Join(dir, filename)
 }
