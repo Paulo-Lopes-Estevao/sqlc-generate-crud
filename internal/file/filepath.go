@@ -5,8 +5,7 @@ import (
 	"path/filepath"
 )
 
-func checkFileExists(dir, filename string) (bool, error) {
-	filePath := filepath.Join(dir, filename)
+func checkFileExists(filePath string) (bool, error) {
 	_, err := os.Stat(filePath)
 	if err == nil {
 		return true, nil
