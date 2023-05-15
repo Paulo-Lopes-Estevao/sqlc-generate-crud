@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -55,4 +56,42 @@ func TestTemplateCrudSql(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, expectedContent, string(content))
+}
+
+func TestContentTemplateCrudSql(t *testing.T) {
+	// Create a mock StructInfo
+	structInfo := StructInfo{
+		Name: "Author",
+		Fields: []Field{
+			{Name: "ID", Type: "int64"},
+			{Name: "Name", Type: "string"},
+			{Name: "Bio", Type: "string"},
+		},
+	}
+
+	// Generate the SQL content using the ContentTemplateCrudSql method
+	content, err := ContentTemplateCrudSql(structInfo)
+	assert.NoError(t, err)
+
+	tempFile, err := os.CreateTemp("", "author.sql")
+	if err != nil {
+		t.Fatal("Failed to create temporary file:", err)
+	}
+	defer func(name string) {
+		err := os.Remove(name)
+		if err != nil {
+			t.Fatal("Failed to remove temporary file:", err)
+		}
+	}(tempFile.Name())
+
+	// Write the generated content to the temporary file
+	err = os.WriteFile(tempFile.Name(), content, 0644)
+	assert.NoError(t, err)
+
+	// Read the content of the "author.sql" file
+	expectedContent, err := os.ReadFile(tempFile.Name())
+	assert.NoError(t, err)
+
+	// Compare the generated content with the content of the "author.sql" file
+	assert.Equal(t, expectedContent, content)
 }
