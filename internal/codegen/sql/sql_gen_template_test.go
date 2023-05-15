@@ -118,3 +118,53 @@ func TestGetStructInfo(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, authorStructInfo, structInfo)
 }
+
+func TestContentTemplateCrudSqlStructInfo(t *testing.T) {
+	structInfo := StructInfo{
+		Name: "Author",
+		Fields: []Field{
+			{Name: "ID", Type: "int64", Format: "id"},
+			{Name: "Name", Type: "string", Format: "name"},
+			{Name: "Bio", Type: "string", Format: "bio"},
+		},
+	}
+
+	expectedContent := `
+	-- name: GetAuthor :one
+	SELECT * FROM author
+	WHERE id = $1 LIMIT 1;
+
+	-- name: ListAuthors :many
+	SELECT * FROM author;
+
+	-- name: CreateAuthor :one
+	INSERT INTO author (
+	  id,
+	  name,
+	  bio
+	) VALUES (
+	  $1,
+	  $2,
+	  $3
+	)
+	RETURNING *;
+
+	-- name: UpdateAuthor :one
+	UPDATE author
+	SET 
+	  id = $1,
+	  name = $2,
+	  bio = $3
+	WHERE id = $4
+	RETURNING *;
+
+	-- name: DeleteAuthor :exec
+	DELETE FROM author
+	WHERE id = $1;
+`
+
+	content, err := ContentTemplateCrudSql(structInfo)
+
+	assert.NoError(t, err)
+	assert.Equal(t, expectedContent, string(content))
+}
