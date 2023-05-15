@@ -39,14 +39,13 @@ sql:
 }
 
 func TestReadYmlVersion1(t *testing.T) {
-	content := []byte(`
-	version: "1"
-	packages:
-	  - name: "db"
-		path: "internal/db"
-		queries: "./sql/query/"
-		schema: "./sql/schema/"
-		engine: "postgresql"
+	content := []byte(`version: "1"
+packages:
+  - name: "db"
+    path: "internal/db"
+    queries: "./sql/query/"
+    schema: "./sql/schema/"
+    engine: "postgresql"
 `)
 
 	// Call the method
