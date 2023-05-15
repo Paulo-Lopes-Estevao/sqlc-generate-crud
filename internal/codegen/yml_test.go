@@ -80,3 +80,39 @@ packages:
 	assert.Equal(t, "./sql/query/", ymlVersion1.Package[0].Queries, "Incorrect queries path")
 	assert.Equal(t, "./sql/schema/", ymlVersion1.Package[0].Schema, "Incorrect schema path")
 }
+
+func TestReadYmlVersion2(t *testing.T) {
+
+	yamlContent := []byte(`version: "2"
+sql:
+  - schema: "postgresql/schema.sql"
+    queries: "postgresql/query.sql"
+    engine: "postgresql"`)
+
+	ymlVersion2, err := ReadYmlVersion2(yamlContent)
+
+	assert.NoError(t, err, "ReadYmlVersion2 should not return an error")
+
+	expectedPackage := YmlVersion2{
+		SQL: []struct {
+			Engine  string `yaml:"engine"`
+			Queries string `yaml:"queries"`
+			Schema  string `yaml:"schema"`
+		}{
+			{
+				Engine:  "postgresql",
+				Queries: "postgresql/query.sql",
+				Schema:  "postgresql/schema.sql",
+			},
+		},
+	}
+
+	assert.Equal(t, expectedPackage, *ymlVersion2, "Incorrect package")
+
+	// Alternatively, you can validate individual fields separately
+	assert.Len(t, ymlVersion2.SQL, 1, "Incorrect number of packages")
+	assert.Equal(t, "postgresql", ymlVersion2.SQL[0].Engine, "Incorrect engine")
+	assert.Equal(t, "postgresql/query.sql", ymlVersion2.SQL[0].Queries, "Incorrect queries path")
+	assert.Equal(t, "postgresql/schema.sql", ymlVersion2.SQL[0].Schema, "Incorrect schema path")
+
+}
