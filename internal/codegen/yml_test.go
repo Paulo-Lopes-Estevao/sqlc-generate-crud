@@ -1,6 +1,7 @@
 package codegen
 
 import (
+	"github.com/Paulo-Lopes-Estevao/cli-sqlc-generate-sql-crud/internal/file"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
@@ -139,4 +140,53 @@ sql:
 	assert.Equal(t, "postgresql/query.sql", ymlVersion2.SQL[0].Queries, "Incorrect queries path")
 	assert.Equal(t, "postgresql/schema.sql", ymlVersion2.SQL[0].Schema, "Incorrect schema path")
 
+}
+
+type Author struct {
+	ID   int64  `bson:"id"`
+	Name string `bson:"name"`
+	Bio  string `bson:"bio"`
+}
+
+func TestGenerateCrudSqlYml(t *testing.T) {
+	tempFile, err := os.CreateTemp("", "sqlc.yaml")
+	if err != nil {
+		t.Fatal("Failed to create temporary file:", err)
+	}
+	defer os.Remove(tempFile.Name())
+
+	yamlContent := []byte(`version: "2"
+sql:
+  - schema: "postgresql/schema.sql"
+    queries: "postgresql/query.sql"
+    engine: "postgresql"`)
+	err = os.WriteFile(tempFile.Name(), yamlContent, 0644)
+	if err != nil {
+		t.Fatal("Failed to write YAML content to the temporary file:", err)
+	}
+
+	tag := "bson"
+
+	ymlConfig := NewYmlConfig()
+	result, err := ymlConfig.ReadVerifyVersionYml(tempFile.Name())
+
+	assert.NoError(t, err, "Failed to read YAML file")
+
+	pathTarget := 0
+
+	err = result.GenerateCrudSqlYml(Author{}, pathTarget, tag)
+
+	assert.NoError(t, err, "Failed to generate SQL file")
+
+	expectedPath := "postgresql/author.sql"
+	exists, err := file.CheckFileIfExists(expectedPath)
+	if err != nil {
+		t.Fatal("Failed to check if the file exists:", err)
+	}
+	assert.True(t, exists, "SQL file was not created in the expected location")
+
+	err = os.RemoveAll("postgresql")
+	if err != nil {
+		t.Fatal("Failed to remove test environment:", err)
+	}
 }
