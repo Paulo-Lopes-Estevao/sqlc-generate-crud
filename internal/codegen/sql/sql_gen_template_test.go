@@ -95,3 +95,26 @@ func TestContentTemplateCrudSql(t *testing.T) {
 	// Compare the generated content with the content of the "author.sql" file
 	assert.Equal(t, expectedContent, content)
 }
+
+func TestGetStructInfo(t *testing.T) {
+	type Author struct {
+		ID   int64  `bson:"id"`
+		Name string `bson:"name"`
+		Bio  string `bson:"bio"`
+	}
+
+	authorStructInfo := StructInfo{
+		Name: "Author",
+		Fields: []Field{
+			{Name: "ID", Type: "int64", Format: "id"},
+			{Name: "Name", Type: "string", Format: "name"},
+			{Name: "Bio", Type: "string", Format: "bio"},
+		},
+	}
+
+	author := Author{}
+	structInfo, err := GetStructInfo(author, "bson")
+
+	assert.NoError(t, err)
+	assert.Equal(t, authorStructInfo, structInfo)
+}
