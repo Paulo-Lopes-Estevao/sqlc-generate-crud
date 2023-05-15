@@ -168,3 +168,21 @@ func TestContentTemplateCrudSqlStructInfo(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, expectedContent, string(content))
 }
+
+func TestToSnakeCase(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"ID", "id"},
+		{"Name", "name"},
+		{"Bio", "bio"},
+		{"UserID", "user_id"},
+		{"UserName", "user_name"},
+	}
+
+	for _, test := range tests {
+		result := ToSnakeCase(test.input)
+		assert.Equal(t, test.expected, result)
+	}
+}
