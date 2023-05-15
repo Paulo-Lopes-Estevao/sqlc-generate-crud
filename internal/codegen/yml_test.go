@@ -12,7 +12,12 @@ func TestReadVerifyVersionYml(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create temporary file:", err)
 	}
-	defer os.Remove(tempFile.Name())
+	defer func(name string) {
+		err := os.Remove(name)
+		if err != nil {
+			t.Fatal("Failed to remove temporary file:", err)
+		}
+	}(tempFile.Name())
 
 	yamlContent := []byte(`version: "2"
 sql:
@@ -44,7 +49,12 @@ func TestReadVerifyVersionYml_NotFoundVersion(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create temporary file:", err)
 	}
-	defer os.Remove(tempFile.Name())
+	defer func(name string) {
+		err := os.Remove(name)
+		if err != nil {
+			t.Fatal("Failed to remove temporary file:", err)
+		}
+	}(tempFile.Name())
 
 	yamlContent := []byte(`version: "3"
 sql:
@@ -153,7 +163,12 @@ func TestGenerateCrudSqlYml(t *testing.T) {
 	if err != nil {
 		t.Fatal("Failed to create temporary file:", err)
 	}
-	defer os.Remove(tempFile.Name())
+	defer func(name string) {
+		err := os.Remove(name)
+		if err != nil {
+			t.Fatal("Failed to remove temporary file:", err)
+		}
+	}(tempFile.Name())
 
 	yamlContent := []byte(`version: "2"
 sql:
