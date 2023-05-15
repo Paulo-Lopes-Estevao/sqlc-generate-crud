@@ -38,6 +38,30 @@ sql:
 	assert.Equal(t, "postgresql/schema.sql", result.YmlVersion2.SQL[0].Schema)
 }
 
+func TestReadVerifyVersionYml_NotFoundVersion(t *testing.T) {
+	tempFile, err := os.CreateTemp("", "sqlc.yaml")
+	if err != nil {
+		t.Fatal("Failed to create temporary file:", err)
+	}
+	defer os.Remove(tempFile.Name())
+
+	yamlContent := []byte(`version: "3"
+sql:
+  - schema: "postgresql/schema.sql"
+    queries: "postgresql/query.sql"
+    engine: "postgresql"`)
+	err = os.WriteFile(tempFile.Name(), yamlContent, 0644)
+	if err != nil {
+		t.Fatal("Failed to write YAML content to the temporary file:", err)
+	}
+
+	ymlConfig := NewYmlConfig()
+	_, err = ymlConfig.ReadVerifyVersionYml(tempFile.Name())
+
+	assert.EqualError(t, err, "version not found")
+
+}
+
 func TestReadYmlVersion1(t *testing.T) {
 	content := []byte(`version: "1"
 packages:
