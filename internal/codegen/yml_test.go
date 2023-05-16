@@ -1,7 +1,7 @@
 package codegen
 
 import (
-	"github.com/Paulo-Lopes-Estevao/cli-sqlc-generate-sql-crud/internal/file"
+	"github.com/Paulo-Lopes-Estevao/sqlc-generate-crud/internal/file"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"

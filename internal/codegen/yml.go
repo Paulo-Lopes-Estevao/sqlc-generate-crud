@@ -3,8 +3,8 @@ package codegen
 import (
 	"errors"
 	"fmt"
-	"github.com/Paulo-Lopes-Estevao/cli-sqlc-generate-sql-crud/internal/codegen/sql"
-	"github.com/Paulo-Lopes-Estevao/cli-sqlc-generate-sql-crud/internal/file"
+	"github.com/Paulo-Lopes-Estevao/sqlc-generate-crud/internal/codegen/sql"
+	"github.com/Paulo-Lopes-Estevao/sqlc-generate-crud/internal/file"
 	"gopkg.in/yaml.v2"
 	"path/filepath"
 	"strings"

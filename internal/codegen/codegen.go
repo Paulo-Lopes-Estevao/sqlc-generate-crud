@@ -2,7 +2,8 @@ package codegen
 
 import (
 	"errors"
-	"github.com/Paulo-Lopes-Estevao/cli-sqlc-generate-sql-crud/internal/file"
+	"github.com/Paulo-Lopes-Estevao/sqlc-generate-crud/internal/file"
+	"log"
 )
 
 type CodeGen struct {
@@ -69,6 +70,6 @@ func GenerateCrudSql(data interface{}, pathTarget int, tag string) error {
 	} else if filePath == "sqlc.json" {
 		errors.New("developing...")
 	}
-
+	log.Println("generate crud sql successfully")
 	return nil
 }
