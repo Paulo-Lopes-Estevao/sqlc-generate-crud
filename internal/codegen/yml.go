@@ -10,6 +10,16 @@ import (
 	"strings"
 )
 
+type IYmlConfig interface {
+	ReadVerifyVersionYml(filePath string) (*YmlConfig, error)
+	GenerateCrudSqlYml(data interface{}, pathTarget int, tag string) error
+	WriteCrudSql() error
+	CheckDirectoryQueriesValuePathYmlV1() error
+	CreateDirectoryQueriesSQLV1() error
+	CheckDirectoryQueriesValuePathYmlV2() error
+	CreateDirectoryQueriesSQLV2() error
+}
+
 type YmlConfig struct {
 	Version     string `yaml:"version"`
 	CodeGen     CodeGen
