@@ -144,14 +144,9 @@ func (ymlConfig *YmlConfig) CreateDirectoryQueriesSQLV2() error {
 
 	filePath := file.JoinPath(dir, fmt.Sprintf("%s.sql", ymlConfig.CodeGen.FileName))
 
-	val, err := file.CheckFileIfExists(filePath)
-	if err != nil {
+	if err := file.CreateDirAndFile(filePath, ymlConfig.CodeGen.Content); err != nil {
 		return err
-	}
-	if !val {
-		if err := file.CreateDirAndFile(filePath, ymlConfig.CodeGen.Content); err != nil {
-			return err
-		}
+
 	}
 
 	return nil
@@ -174,14 +169,8 @@ func (ymlConfig *YmlConfig) CreateDirectoryQueriesSQLV1() error {
 
 	filePath := file.JoinPath(dir, fmt.Sprintf("%s.sql", ymlConfig.CodeGen.FileName))
 
-	val, err := file.CheckFileIfExists(filePath)
-	if err != nil {
+	if err := file.CreateDirAndFile(filePath, ymlConfig.CodeGen.Content); err != nil {
 		return err
-	}
-	if !val {
-		if err := file.CreateDirAndFile(filePath, ymlConfig.CodeGen.Content); err != nil {
-			return err
-		}
 	}
 
 	return nil
