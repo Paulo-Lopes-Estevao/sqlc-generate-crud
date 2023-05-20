@@ -1,6 +1,6 @@
 # sqlc generate crud
 
-is a library that generates CRUD in sql operations for a struct using.
+is a library that generates CRUD sql operations for a struct using the sqlc structure.
 
 ## Case of use
 
